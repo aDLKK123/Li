@@ -1,0 +1,50 @@
+local player = game.Players.LocalPlayer
+
+-- ===== GUI =====
+local gui = Instance.new("ScreenGui")
+gui.Name = "AnimBoost"
+gui.Parent = player.PlayerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0,180,0,300)
+frame.Position = UDim2.new(0,20,0,120)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+frame.Parent = gui
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1,0,0,40)
+title.Text = "Animation xBoost"
+title.TextColor3 = Color3.new(1,1,1)
+title.BackgroundTransparency = 1
+title.Parent = frame
+
+-- ===== Function =====
+local function setAnimSpeed(multiplier)
+	local char = player.Character or player.CharacterAdded:Wait()
+	local humanoid = char:WaitForChild("Humanoid")
+
+	for _,track in pairs(humanoid:GetPlayingAnimationTracks()) do
+		track:AdjustSpeed(multiplier)
+	end
+
+	humanoid.AnimationPlayed:Connect(function(track)
+		track:AdjustSpeed(multiplier)
+	end)
+end
+
+-- ===== Danh sách nút =====
+local speeds = {2,3,4,5,6,7,8}
+
+for i,v in pairs(speeds) do
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1,-20,0,30)
+	btn.Position = UDim2.new(0,10,0,40 + (i-1)*35)
+	btn.Text = "x"..v
+	btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.Parent = frame
+
+	btn.MouseButton1Click:Connect(function()
+		setAnimSpeed(v)
+	end)
+end
